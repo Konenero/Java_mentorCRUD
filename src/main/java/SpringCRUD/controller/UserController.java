@@ -20,6 +20,12 @@ public class UserController {
         return "info";
     }
 
+    @GetMapping("/users/{id}/show")
+    public String showUser(@PathVariable("id") int id, Model model) {
+        model.addAttribute("user", userService.getUser(id));
+        return "show";
+
+    }
 
     @GetMapping("/new")
     public String formForAdd(@ModelAttribute("user") User user) {
@@ -43,8 +49,9 @@ public class UserController {
         userService.updateUser(id, user);
         return "redirect:/api/users";
     }
+
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable("id") int id){
+    public String deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
         return "redirect:/api/users";
     }
