@@ -23,7 +23,7 @@
             <td th:utext="${user.getSurname()}">surname</td>
             <td>
                 <button type="button">
-                    <a th:href="@{/api/users/{id}/update(id=${user.getId()})}" class="btn btn-danger">Update</a>
+                    <a th:href="@{/api/users/{id}(id=${user.getId()})}" class="btn btn-danger">Update</a>
                 </button>
             </td>
             <td>

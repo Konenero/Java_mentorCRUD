@@ -5,7 +5,6 @@ import SpringCRUD.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -21,11 +20,6 @@ public class UserController {
         return "info";
     }
 
-    @GetMapping("/users/{id}")
-    public String showUser(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        return "show";
-    }
 
     @GetMapping("/new")
     public String formForAdd(@ModelAttribute("user") User user) {
@@ -38,7 +32,7 @@ public class UserController {
         return "redirect:/api/users";
     }
 
-    @GetMapping("/users/{id}/update")
+    @GetMapping("/users/{id}")
     public String userUpdate(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", userService.getUser(id));
         return "update";
