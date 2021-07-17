@@ -8,54 +8,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 
 @Repository
 public class UserDAOImpl implements UserDAO {
-    @Autowired
-    private SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<User> getAllUsers() {
-        Session session = sessionFactory.getCurrentSession();
-        Query<User> query = session.createQuery("from User", User.class);
-        List<User> allUsers = query.getResultList();
-        return allUsers;
+        return entityManager.createQuery("from User", User.class).getResultList();
     }
 
     @Override
     public void saveUser(User user) {
-        Session session = sessionFactory.getCurrentSession();
-        session.saveOrUpdate(user);
+        entityManager.persist(user);
     }
 
     @Override
     public User getUser(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        User user = session.get(User.class, id);
-        return user;
+        return entityManager.find(User.class, id);
     }
 
     @Override
     public void deleteUser(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        Query<User> query = session.createQuery("delete from User where id=:userId");
-        query.setParameter("userId", id);
-        query.executeUpdate();
-
+        entityManager.remove(getUser(id));
     }
 
     @Override
     public void updateUser(int id, User user) {
-        Session session = sessionFactory.getCurrentSession();
-        Query<User> query = session.createQuery("update User set " +
-                "name = :nameParam, " +
-                "surname = :surnameParam" +
-                " where id = :idCod");
-        query.setParameter("nameParam", user.getName());
-        query.setParameter("surnameParam", user.getSurname());
-        query.setParameter("idCod", id);
-        query.executeUpdate();
+        entityManager.merge(user);
     }
 }
